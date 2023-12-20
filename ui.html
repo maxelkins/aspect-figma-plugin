@@ -1,0 +1,36 @@
+<h2>Aspect</h2>
+<p>
+	<label for="size">Width:</label>
+	<input id="size" value="100" />
+</p>
+<p>
+  <fieldset>
+    <legend>Aspect ratio</legend>
+    <label>
+      <input type="radio" name="aspect" value="0.5625" checked />
+      16:9
+    </label>
+    <label>
+      <input type="radio" name="aspect" value="1" />
+      1:1
+    </label>
+  </fieldset>
+	
+</p>
+<button id="create">Create</button>
+<script>
+	document.getElementById("create").onclick = () => {
+		const sizeInput = document.getElementById("size");
+		const size = parseInt(sizeInput.value, 10);
+		const aspectInput = document.querySelector(
+			"input[type='radio'][name=aspect]:checked"
+		);
+		const ratio = parseFloat(aspectInput.value) *  parseFloat(size);
+    
+		parent.postMessage(
+			{ pluginMessage: { type: "create-rectangles", size, ratio } },
+			"*"
+		);
+	};
+
+</script>

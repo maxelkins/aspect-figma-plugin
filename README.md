@@ -6,7 +6,9 @@
 
 ## Install
 
-`npm install`
+```
+npm install
+```
 
 ## Development
 

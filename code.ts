@@ -37,7 +37,31 @@ figma.ui.onmessage = (msg) => {
 		figma.currentPage.selection = nodes;
 		figma.viewport.scrollAndZoomIntoView(nodes);
 	}
+	if (msg.type === "rasterise") {
+		const frame = figma.currentPage.selection[0];
 
+		if (frame && frame.type === "FRAME") {
+			const newImageLayer = figma.createRectangle();
+
+			// Copy relevant styles and properties
+			newImageLayer.resize(frame.width, frame.height);
+			newImageLayer.x = frame.x;
+			newImageLayer.y = frame.y;
+			newImageLayer.fills = frame.fills; // Copy background color, etc.
+
+			// Copy children (layers) from the original frame to the new image layer
+			frame.children.forEach((child) => {
+				const childClone = child.clone();
+				// newImageLayer.appendChild(childClone);
+			});
+
+			// Optional: Remove the original frame
+			frame.remove();
+
+			figma.currentPage.appendChild(newImageLayer);
+			figma.viewport.scrollAndZoomIntoView([newImageLayer]);
+		}
+	}
 	// Make sure to close the plugin when you're done. Otherwise the plugin will
 	// keep running, which shows the cancel button at the bottom of the screen.
 	// figma.closePlugin();
